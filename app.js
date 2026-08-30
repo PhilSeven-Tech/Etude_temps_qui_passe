@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Dynamic Week Perception Badge Floating ABOVE the Point on curve-canvas
         const curWDays = perceivedWeekDays(currentAge, compareAge);
-        const curUnit = curWDays >= 2.0 ? 'jours ressentis' : 'jour ressenti';
+        const curUnit = curWDays > 0 ? 'jours ressentis' : 'jour ressenti';
         const curveLabelText = `1 semaine = ${curWDays.toFixed(1).replace('.', ',')} ${curUnit}`;
 
         ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (ttAge) ttAge.textContent = `${hoveredAge.toFixed(0)} ans`;
                 if (ttWeek) {
                     const wDays = perceivedWeekDays(hoveredAge, compareAge);
-                    const unit = wDays >= 2.0 ? 'jours ressentis' : 'jour ressenti';
+                    const unit = wDays > 0 ? 'jours ressentis' : 'jour ressenti';
                     ttWeek.textContent = `${wDays.toFixed(1).replace('.', ',')} ${unit}`;
                 }
 
@@ -768,7 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cumulativePct = perceivedPercentage(year, maxAge);
             const gridDays = perceivedWeekDays(year, compareAge);
             const gridDaysFormatted = gridDays.toFixed(1).replace('.', ',');
-            const gridUnit = gridDays >= 2.0 ? 'jours' : 'jour';
+            const gridUnit = gridDays > 0 ? 'jours ressentis' : 'jour ressenti';
             const weekText = year === compareAge
                 ? `★ À ${year} ans, la semaine fait 7,0 jours (âge repère).`
                 : `À ${year} ans, la semaine paraît en avoir ${gridDaysFormatted} ${gridUnit} (vs 7j à ${compareAge} ans).`;
