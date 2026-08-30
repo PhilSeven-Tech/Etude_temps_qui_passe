@@ -820,6 +820,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Why Sqrt Popover Handler (Intégrale tab) ---
+    const btnWhySqrt = document.getElementById('btn-why-sqrt');
+    const popoverWhySqrt = document.getElementById('popover-why-sqrt');
+    const btnCloseWhySqrt = document.getElementById('btn-close-why-sqrt');
+
+    if (btnWhySqrt && popoverWhySqrt) {
+        btnWhySqrt.addEventListener('click', (e) => {
+            e.stopPropagation();
+            popoverWhySqrt.classList.toggle('hidden');
+        });
+
+        if (btnCloseWhySqrt) {
+            btnCloseWhySqrt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                popoverWhySqrt.classList.add('hidden');
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!popoverWhySqrt.contains(e.target) && !btnWhySqrt.contains(e.target)) {
+                popoverWhySqrt.classList.add('hidden');
+            }
+        });
+    }
+
     // --- Event Listeners Setup ---
 
     if (ageSlider) ageSlider.addEventListener('input', updateAll);

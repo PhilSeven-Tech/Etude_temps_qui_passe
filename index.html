@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css?v=5">
+    <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
@@ -175,22 +175,23 @@
                                     </p>
                                 </div>
 
-                                <!-- CARD 3 WITH MOUSEOVER TOOLTIP -->
+                                <!-- CARD 3 WITH MOUSEOVER & CLICK TOOLTIP -->
                                 <div class="bg-slate-800/90 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-slate-700/80 space-y-0.5 sm:space-y-1 text-left relative group cursor-help transition-all hover:border-purple-500/50 hover:bg-slate-800 min-w-[210px] sm:min-w-0 shrink-0 sm:shrink">
-                                    <div class="font-bold text-purple-300 text-[10.5px] sm:text-xs flex items-center justify-between">
+                                    <div class="font-bold text-purple-300 text-[10.5px] sm:text-xs flex items-center justify-between gap-1">
                                         <span class="flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> Seuil de Mi-Vie Psychologique</span>
-                                        <span class="text-[9px] sm:text-[10px] text-purple-300 font-mono bg-purple-900/80 px-1 py-0.5 rounded border border-purple-700 flex items-center gap-1">
+                                        <button id="btn-why-sqrt" type="button" class="text-[9px] sm:text-[10px] text-purple-300 font-mono bg-purple-900/80 hover:bg-purple-800 px-1.5 py-0.5 rounded border border-purple-700 flex items-center gap-1 cursor-pointer transition-colors shrink-0">
                                             <i data-lucide="help-circle" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i> Pourquoi √N ?
-                                        </span>
+                                        </button>
                                     </div>
                                     <p class="text-slate-300 leading-relaxed text-[10px] sm:text-[11px]" id="card-midpoint-desc">
                                         Pour une vie de <strong>100 ans</strong>, la moitié exacte (<strong>50%</strong>) de votre perception de vie est déjà vécue dès l'âge de <strong>10,0 ans</strong> (calculé par √100) !
                                     </p>
 
-                                    <!-- MOUSE OVER HOVER POPOVER (DÉMONSTRATION MATHÉMATIQUE) -->
-                                    <div class="hidden group-hover:block absolute top-full left-0 mt-2 w-72 sm:w-80 bg-slate-950 border border-purple-500/50 p-3 sm:p-4 rounded-xl shadow-2xl z-50 text-white space-y-2 sm:space-y-2.5 backdrop-blur-xl transition-all">
+                                    <!-- HOVER / CLICK POPOVER (DÉMONSTRATION MATHÉMATIQUE) -->
+                                    <div id="popover-why-sqrt" class="hidden group-hover:block absolute top-full left-0 mt-2 w-72 sm:w-80 bg-slate-950 border border-purple-500/50 p-3 sm:p-4 rounded-xl shadow-2xl z-50 text-white space-y-2 sm:space-y-2.5 backdrop-blur-xl transition-all">
                                         <div class="font-bold text-xs text-purple-300 border-b border-slate-800 pb-1.5 flex items-center justify-between">
                                             <span class="flex items-center gap-1.5"><i data-lucide="calculator" class="w-4 h-4 text-purple-400"></i> Pourquoi la Racine Carrée (√N) ?</span>
+                                            <button id="btn-close-why-sqrt" type="button" class="text-slate-400 hover:text-white p-0.5"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                                         </div>
                                         <div class="text-[11px] text-slate-300 space-y-1.5 leading-relaxed font-sans">
                                             <div><strong class="text-purple-300">1. Volume Total :</strong> V(N) = ln(N)</div>
@@ -406,7 +407,7 @@
     </main>
 
     <!-- App Script -->
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=6"></script>
     <script>
         lucide.createIcons();
     </script>
