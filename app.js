@@ -99,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return age / referenceAge;
     }
 
+    function perceivedWeekDays(age, referenceAge = 10) {
+        if (referenceAge <= 0 || age <= 0) return 7.0;
+        return (7.0 * referenceAge) / age;
+    }
+
     // --- App Update Logic ---
 
     function updateAll() {
@@ -123,8 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const ratio = speedRatio(currentAge, compareAge);
-        if (hudSpeedLabel) hudSpeedLabel.textContent = `vs ${compareAge}a :`;
-        if (hudSpeedVal) hudSpeedVal.textContent = `${ratio.toFixed(1)}x`;
+        const days = perceivedWeekDays(currentAge, compareAge);
+        const daysFormatted = days.toFixed(1).replace('.', ',');
+
+        if (hudSpeedLabel) hudSpeedLabel.textContent = `Semaine vs ${compareAge}a :`;
+        if (hudSpeedVal) hudSpeedVal.textContent = `${daysFormatted} j`;
 
         // Update Hourglass View
         if (hgChronoVal) hgChronoVal.textContent = `${currentAge} / ${maxAge} ans`;
@@ -142,7 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (spdCurAge) spdCurAge.textContent = currentAge;
         if (spdTargetAge) spdTargetAge.textContent = compareAge;
-        if (spdResultText) spdResultText.textContent = `${ratio.toFixed(1)}x plus rapide`;
+        const weekUnit = days >= 2.0 ? 'jours' : 'jour';
+        if (spdResultText) spdResultText.textContent = `${daysFormatted} ${weekUnit}`;
 
         renderActiveView();
     }
@@ -360,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const ttWeight = document.getElementById('tt-weight');
                 const ttIntegral = document.getElementById('tt-integral');
                 const ttPct = document.getElementById('tt-pct');
+                const ttWeek = document.getElementById('tt-week');
 
                 ttAge.textContent = `${hoveredAge.toFixed(1)} ans`;
                 const w = fx(hoveredAge);
@@ -368,6 +378,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ttIntegral.textContent = v.toFixed(3);
                 const p = perceivedPercentage(hoveredAge, maxAge);
                 ttPct.textContent = `${p.toFixed(1)}%`;
+                if (ttWeek) {
+                    const wDays = perceivedWeekDays(hoveredAge, compareAge);
+                    const unit = wDays >= 2.0 ? 'jours' : 'jour';
+                    ttWeek.textContent = `${wDays.toFixed(1).replace('.', ',')} ${unit}`;
+                }
 
                 canvasTooltip.classList.remove('hidden');
                 
@@ -645,6 +660,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const isMidpoint = Math.round(subjectiveMidpoint(maxAge)) === year;
             const cumulativeVol = volumeIntegral(year);
             const cumulativePct = perceivedPercentage(year, maxAge);
+            const gridDays = perceivedWeekDays(year, compareAge);
+            const gridDaysFormatted = gridDays.toFixed(1).replace('.', ',');
+            const gridUnit = gridDays >= 2.0 ? 'jours' : 'jour';
+            const weekText = year === compareAge
+                ? `★ À ${year} ans, la semaine fait 7,0 jours (âge repère).`
+                : `À ${year} ans, la semaine paraît en avoir ${gridDaysFormatted} ${gridUnit} (vs 7j à ${compareAge} ans).`;
 
             const isTopRow = year <= 20;
             const popoverPosClass = isTopRow ? 'top-full mt-2' : 'bottom-full mb-2';
@@ -680,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div>• <strong>Volume cumulé :</strong> ln(${year}) = ${cumulativeVol.toFixed(2)} ln</div>
                         <div>• <strong>Perception vécue :</strong> ${cumulativePct.toFixed(1)}% de toute une vie</div>
                         <div class="p-1 sm:p-1.5 bg-purple-950/90 rounded border border-purple-800/80 text-purple-200 text-[9px] sm:text-[10px] mt-1 italic">
-                            ${year === 10 ? '★ Seuil des 50% de toute la vie ressentie !' : `1 an à ${year} ans paraît ${(year / compareAge).toFixed(1)}x plus rapide qu'à 10 ans.`}
+                            ${weekText}
                         </div>
                     </div>
                 </div>
