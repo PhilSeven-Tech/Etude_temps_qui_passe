@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css?v=17">
+    <link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
@@ -119,22 +119,6 @@
                 <!-- VIEW 1: Main 1/x Canvas -->
                 <div id="view-curve" class="view-panel absolute inset-0 w-full h-full">
                     <canvas id="curve-canvas" class="w-full h-full block cursor-crosshair touch-none"></canvas>
-                    
-                    <!-- FLOATING LEGEND OVERLAY (Desktop PC only) -->
-                    <div class="hidden sm:flex absolute top-4 left-4 z-20 glass-pill px-4 py-2 rounded-xl border border-slate-200 bg-white/90 shadow-md backdrop-blur-md items-center gap-4 text-xs font-semibold">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3.5 h-3.5 rounded bg-purple-600 shadow-xs inline-block"></span>
-                            <span class="text-slate-800">Aire Vécue <strong class="font-mono text-purple-700 text-[11px]">∫ 1/x dx</strong></span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3.5 h-3.5 rounded bg-slate-200 border border-slate-300 inline-block"></span>
-                            <span class="text-slate-500">Aire Restante</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 inline-block"></span>
-                            <span class="text-amber-800 font-bold">Mi-vie √100 = 10a</span>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- VIEW 2: Logarithmic ln(x) Canvas + Pedagogical Header -->
@@ -390,7 +374,7 @@
     </main>
 
     <!-- App Script -->
-    <script src="app.js?v=17"></script>
+    <script src="app.js?v=18"></script>
     <script>
         lucide.createIcons();
     </script>
