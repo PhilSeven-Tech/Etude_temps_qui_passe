@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
@@ -185,8 +185,8 @@
                                                 <i data-lucide="help-circle" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i> Pourquoi √N ?
                                             </button>
 
-                                            <!-- HOVER & CLICK POPOVER -->
-                                            <div id="popover-why-sqrt" class="why-sqrt-popover absolute top-full right-0 sm:left-auto mt-2 w-72 sm:w-80 bg-slate-950 border border-purple-500/50 p-3 sm:p-4 rounded-xl shadow-2xl z-50 text-white space-y-2 sm:space-y-2.5 backdrop-blur-xl transition-all">
+                                            <!-- HOVER & CLICK POPOVER (Positionné vers le haut pour lisibilité totale) -->
+                                            <div id="popover-why-sqrt" class="why-sqrt-popover absolute bottom-full mb-2 right-0 w-72 sm:w-80 bg-slate-950 border border-purple-500/50 p-3 sm:p-4 rounded-xl shadow-2xl z-50 text-white space-y-2 sm:space-y-2.5 backdrop-blur-xl transition-all">
                                                 <div class="font-bold text-xs text-purple-300 border-b border-slate-800 pb-1.5 flex items-center justify-between">
                                                     <span class="flex items-center gap-1.5"><i data-lucide="calculator" class="w-4 h-4 text-purple-400"></i> Pourquoi la Racine Carrée (√N) ?</span>
                                                     <button id="btn-close-why-sqrt" type="button" class="text-slate-400 hover:text-white p-0.5"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
@@ -417,7 +417,7 @@
     </main>
 
     <!-- App Script -->
-    <script src="app.js?v=8"></script>
+    <script src="app.js?v=9"></script>
     <script>
         lucide.createIcons();
     </script>
