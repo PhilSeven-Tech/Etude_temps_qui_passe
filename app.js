@@ -798,17 +798,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${weightPct.toFixed(1)}%
                 </div>
 
-                <!-- RICH MOUSEOVER POPOVER FOR THIS YEAR -->
-                <div class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 ${popoverPosClass} w-56 sm:w-64 bg-slate-950 text-white p-2.5 sm:p-3 rounded-xl shadow-2xl z-50 pointer-events-none text-left space-y-1 sm:space-y-1.5 border border-purple-500/50 backdrop-blur-xl transition-all">
+                <!-- SIMPLIFIED MOUSEOVER POPOVER FOR THIS YEAR -->
+                <div class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 ${popoverPosClass} w-52 sm:w-60 bg-slate-950 text-white p-2.5 sm:p-3 rounded-xl shadow-2xl z-50 pointer-events-none text-left space-y-1.5 border border-purple-500/50 backdrop-blur-xl transition-all">
                     <div class="font-bold text-[11px] sm:text-xs text-purple-300 border-b border-slate-800 pb-1 flex items-center justify-between">
                         <span>An ${year} (${isPassed ? 'Déjà vécu' : 'À venir'})</span>
                         ${isMidpoint ? '<span class="text-amber-400 font-mono text-[9px] sm:text-[10px]">★ Mi-vie 50%</span>' : ''}
                     </div>
-                    <div class="text-[10px] sm:text-[11px] text-slate-300 space-y-1 font-sans leading-snug">
-                        <div>• <strong>Poids (1/x) :</strong> ${weightPct.toFixed(2)}% d'une vie antérieure</div>
-                        <div>• <strong>Volume cumulé :</strong> ln(${year}) = ${cumulativeVol.toFixed(2)} ln</div>
-                        <div>• <strong>Perception vécue :</strong> ${cumulativePct.toFixed(1)}% de toute une vie</div>
-                        <div class="p-1 sm:p-1.5 bg-purple-950/90 rounded border border-purple-800/80 text-purple-200 text-[9px] sm:text-[10px] mt-1 italic">
+                    <div class="text-[10.5px] sm:text-[11.5px] text-slate-300 space-y-1.5 font-sans leading-snug">
+                        <div>• <strong>Perception vécue :</strong> ${cumulativePct.toFixed(1).replace('.', ',')}% de la vie</div>
+                        <div class="p-1.5 bg-purple-950/90 rounded border border-purple-800/80 text-purple-200 text-[9.5px] sm:text-[10.5px] mt-1 italic">
                             ${weekText}
                         </div>
                     </div>
