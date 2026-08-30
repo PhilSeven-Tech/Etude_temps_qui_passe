@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (spdCurAge) spdCurAge.textContent = currentAge;
         if (spdTargetAge) spdTargetAge.textContent = compareAge;
-        const weekUnit = days >= 2.0 ? 'jours' : 'jour';
+        const weekUnit = days > 1.0 ? 'jours' : 'jour';
         if (spdResultText) spdResultText.textContent = `${daysFormatted} ${weekUnit}`;
 
         renderActiveView();
