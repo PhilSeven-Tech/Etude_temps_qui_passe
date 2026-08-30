@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMobile = window.innerWidth < 640;
 
         if (hudButtonsRow) {
-            if (isMobile && tabName === 'ln') {
+            if (isMobile && (tabName === 'ln' || tabName === 'grid' || tabName === 'hourglass')) {
                 hudButtonsRow.classList.add('hidden');
             } else {
                 hudButtonsRow.classList.remove('hidden');
@@ -847,7 +847,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lnCanvas) resizeObserver.observe(lnCanvas.parentElement);
 
     window.addEventListener('resize', () => {
-        renderActiveView();
+        setActiveTab(activeTab);
     });
 
     setTimeout(updateAll, 50);
