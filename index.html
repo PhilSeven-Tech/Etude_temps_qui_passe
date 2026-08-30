@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css?v=14">
+    <link rel="stylesheet" href="styles.css?v=15">
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
@@ -300,16 +300,13 @@
 
                 </div>
 
-                <!-- FLOATING INTERACTIVE TOOLTIP -->
-                <div id="canvas-tooltip" class="absolute hidden pointer-events-none bg-white/95 border border-purple-300 p-2 sm:p-3.5 rounded-xl shadow-2xl backdrop-blur-md text-[10px] sm:text-xs space-y-0.5 sm:space-y-1 z-30 border-l-4 border-l-purple-600">
-                    <div class="font-bold text-purple-900 flex items-center justify-between gap-2 sm:gap-4">
-                        <span>Âge : <strong id="tt-age" class="text-slate-900 font-mono">25 ans</strong></span>
-                        <span id="tt-type-badge" class="text-[9px] px-1 py-0.2 rounded bg-purple-100 text-purple-800 font-bold uppercase">Info</span>
+                <!-- FLOATING INTERACTIVE TOOLTIP (Focus unique sur la semaine perçue) -->
+                <div id="canvas-tooltip" class="absolute hidden pointer-events-none bg-white/95 border border-sky-300 p-2 sm:p-2.5 rounded-xl shadow-xl backdrop-blur-md text-[11px] sm:text-xs z-30 border-l-4 border-l-sky-600">
+                    <div class="font-bold text-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+                        <span>À <span id="tt-age" class="font-mono text-sky-700">25 ans</span> :</span>
+                        <span class="text-slate-600">1 semaine =</span>
+                        <strong id="tt-week" class="font-mono text-sky-700 font-extrabold text-xs sm:text-sm">2,8 jours</strong>
                     </div>
-                    <div class="text-slate-600">Poids (1/x) : <span id="tt-weight" class="font-mono text-sky-700 font-bold">0.040</span></div>
-                    <div class="text-slate-600">Volume (ln x) : <span id="tt-integral" class="font-mono text-purple-700 font-bold">3.219</span></div>
-                    <div class="text-slate-600">Temps ressenti : <span id="tt-pct" class="font-mono text-amber-700 font-bold">73.5%</span></div>
-                    <div class="text-slate-600">Semaine perçue : <span id="tt-week" class="font-mono text-emerald-700 font-bold">2,8 j</span></div>
                 </div>
 
             </div>
@@ -395,7 +392,7 @@
     </main>
 
     <!-- App Script -->
-    <script src="app.js?v=14"></script>
+    <script src="app.js?v=15"></script>
     <script>
         lucide.createIcons();
     </script>

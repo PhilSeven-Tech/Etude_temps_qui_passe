@@ -330,6 +330,57 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
 
+        // Dynamic Week Perception Badge Floating ABOVE the Point on curve-canvas
+        const curWDays = perceivedWeekDays(currentAge, compareAge);
+        const curUnit = curWDays >= 2.0 ? 'jours' : 'jour';
+        const curveLabelText = `1 semaine = ${curWDays.toFixed(1).replace('.', ',')} ${curUnit}`;
+
+        ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
+        const curveMetrics = ctx.measureText(curveLabelText);
+        const curvePadX = isMobile ? 8 : 10;
+        const curveBadgeW = curveMetrics.width + curvePadX * 2;
+        const curveBadgeH = (isMobile ? 18 : 22);
+
+        let curveBadgeX = curPx - curveBadgeW / 2;
+        if (curveBadgeX < margin.left + 5) curveBadgeX = margin.left + 5;
+        if (curveBadgeX + curveBadgeW > width - margin.right - 5) curveBadgeX = width - margin.right - 5 - curveBadgeW;
+
+        const curveBadgeY = curPy - (isMobile ? 26 : 32);
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(2, 132, 199, 0.4)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 3;
+
+        ctx.fillStyle = '#0284c7';
+        const cr = 6;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(curveBadgeX, curveBadgeY, curveBadgeW, curveBadgeH, cr);
+        } else {
+            ctx.rect(curveBadgeX, curveBadgeY, curveBadgeW, curveBadgeH);
+        }
+        ctx.fill();
+        ctx.restore();
+
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+
+        ctx.fillStyle = '#0284c7';
+        ctx.beginPath();
+        ctx.moveTo(curPx - 5, curveBadgeY + curveBadgeH);
+        ctx.lineTo(curPx + 5, curveBadgeY + curveBadgeH);
+        ctx.lineTo(curPx, curveBadgeY + curveBadgeH + 5);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(curveLabelText, curveBadgeX + curveBadgeW / 2, curveBadgeY + curveBadgeH / 2);
+
         ctx.fillStyle = '#0284c7';
         ctx.font = `bold ${isMobile ? '11px' : '13px'} Outfit, sans-serif`;
         ctx.textAlign = 'center';
@@ -375,18 +426,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (canvasTooltip) {
                 const ttAge = document.getElementById('tt-age');
-                const ttWeight = document.getElementById('tt-weight');
-                const ttIntegral = document.getElementById('tt-integral');
-                const ttPct = document.getElementById('tt-pct');
                 const ttWeek = document.getElementById('tt-week');
 
-                ttAge.textContent = `${hoveredAge.toFixed(1)} ans`;
-                const w = fx(hoveredAge);
-                ttWeight.textContent = `${w.toFixed(3)} (${(w * 100).toFixed(1)}%)`;
-                const v = volumeIntegral(hoveredAge);
-                ttIntegral.textContent = v.toFixed(3);
-                const p = perceivedPercentage(hoveredAge, maxAge);
-                ttPct.textContent = `${p.toFixed(1)}%`;
+                if (ttAge) ttAge.textContent = `${hoveredAge.toFixed(0)} ans`;
                 if (ttWeek) {
                     const wDays = perceivedWeekDays(hoveredAge, compareAge);
                     const unit = wDays >= 2.0 ? 'jours' : 'jour';
@@ -396,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 canvasTooltip.classList.remove('hidden');
                 
                 let leftPos = hPx + 15;
-                if (leftPos + 200 > width) leftPos = hPx - 210;
+                if (leftPos + 180 > width) leftPos = hPx - 190;
                 let topPos = Math.max(15, hPy - 35);
 
                 canvasTooltip.style.left = `${leftPos}px`;
@@ -619,7 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Dynamic Volume Badge Floating ABOVE the Point
         const curPct = (curVol / maxVolume) * 100;
-        const labelText = `Vol. ressenti : ${curVol.toFixed(2)} (${curPct.toFixed(1)}%)`;
+        const labelText = `Perception du volume de vie passée : ${curPct.toFixed(1).replace('.', ',')}%`;
 
         ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
         const textMetrics = ctx.measureText(labelText);
