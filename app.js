@@ -606,7 +606,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Current Age Node
         const curPx = mapX(currentAge);
-        const curPy = mapY(volumeIntegral(currentAge));
+        const curVol = volumeIntegral(currentAge);
+        const curPy = mapY(curVol);
 
         ctx.beginPath();
         ctx.arc(curPx, curPy, isMobile ? 6 : 7, 0, Math.PI * 2);
@@ -615,6 +616,62 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineWidth = 2.5;
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
+
+        // Dynamic Volume Badge Floating ABOVE the Point
+        const curPct = (curVol / maxVolume) * 100;
+        const labelText = `Vol. ressenti : ${curVol.toFixed(2)} (${curPct.toFixed(1)}%)`;
+
+        ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
+        const textMetrics = ctx.measureText(labelText);
+        const paddingX = isMobile ? 8 : 10;
+        const badgeW = textMetrics.width + paddingX * 2;
+        const badgeH = (isMobile ? 18 : 22);
+
+        // Clamp badgeX to stay within visible canvas margins
+        let badgeX = curPx - badgeW / 2;
+        if (badgeX < margin.left + 5) badgeX = margin.left + 5;
+        if (badgeX + badgeW > width - margin.right - 5) badgeX = width - margin.right - 5 - badgeW;
+
+        const badgeY = curPy - (isMobile ? 28 : 34);
+
+        // Draw shadow under badge
+        ctx.save();
+        ctx.shadowColor = 'rgba(79, 70, 229, 0.4)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 3;
+
+        // Badge Background (Indigo Pill)
+        ctx.fillStyle = '#4f46e5';
+        const r = 6;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(badgeX, badgeY, badgeW, badgeH, r);
+        } else {
+            ctx.rect(badgeX, badgeY, badgeW, badgeH);
+        }
+        ctx.fill();
+        ctx.restore();
+
+        // White Border for Badge
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+
+        // Pointer Arrow pointing down to circle node
+        ctx.fillStyle = '#4f46e5';
+        ctx.beginPath();
+        ctx.moveTo(curPx - 5, badgeY + badgeH);
+        ctx.lineTo(curPx + 5, badgeY + badgeH);
+        ctx.lineTo(curPx, badgeY + badgeH + 5);
+        ctx.closePath();
+        ctx.fill();
+
+        // Badge Text (White)
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(labelText, badgeX + badgeW / 2, badgeY + badgeH / 2);
 
         // Axes
         ctx.lineWidth = 2;
