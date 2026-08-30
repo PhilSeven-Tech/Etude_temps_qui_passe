@@ -829,21 +829,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Why Sqrt Popover Handler (Intégrale tab) ---
+    // --- Why Sqrt Top-Level Modal Handler (Intégrale tab) ---
     const btnWhySqrt = document.getElementById('btn-why-sqrt');
     const popoverWhySqrt = document.getElementById('popover-why-sqrt');
     const btnCloseWhySqrt = document.getElementById('btn-close-why-sqrt');
+    const btnCloseWhySqrtFooter = document.getElementById('btn-close-why-sqrt-footer');
 
     if (btnWhySqrt && popoverWhySqrt) {
         btnWhySqrt.addEventListener('mouseenter', () => {
             popoverWhySqrt.classList.add('active');
         });
-
-        if (btnWhySqrt.parentElement) {
-            btnWhySqrt.parentElement.addEventListener('mouseleave', () => {
-                popoverWhySqrt.classList.remove('active');
-            });
-        }
 
         btnWhySqrt.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -857,8 +852,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        document.addEventListener('click', (e) => {
-            if (!popoverWhySqrt.contains(e.target) && !btnWhySqrt.contains(e.target)) {
+        if (btnCloseWhySqrtFooter) {
+            btnCloseWhySqrtFooter.addEventListener('click', (e) => {
+                e.stopPropagation();
+                popoverWhySqrt.classList.remove('active');
+            });
+        }
+
+        popoverWhySqrt.addEventListener('click', (e) => {
+            if (e.target === popoverWhySqrt) {
                 popoverWhySqrt.classList.remove('active');
             }
         });
