@@ -1,0 +1,847 @@
+/**
+ * L'Illusion du Temps — Application de Spécialiste (Hero Canvas Mode)
+ * Loi de Paul Janet f(x) = 1/x et Intégrale de Vie V(A) = ln(A)
+ * Explications au survol (Mouse Over) sur chaque année
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    // --- State Variables ---
+    let currentAge = 40;
+    const maxAge = 100;
+    let minAge = 1;
+    let compareAge = 10;
+    let activeTab = 'curve';
+    let isDraggingCanvas = false;
+
+    let hoveredAge = null;
+
+    // --- DOM Elements ---
+    const ageSlider = document.getElementById('age-slider');
+    const ageDisplay = document.getElementById('age-display');
+    const compareAgeInput = document.getElementById('compare-age-input');
+
+    // Floating HUD Interactive Buttons
+    const hudBadgePerceived = document.getElementById('hud-badge-perceived');
+    const hudPerceivedPct = document.getElementById('hud-perceived-pct');
+    const hudPerceivedIntegral = document.getElementById('hud-perceived-integral');
+
+    const hudBadgeMidpoint = document.getElementById('hud-badge-midpoint');
+    const hudMidpointVal = document.getElementById('hud-midpoint-val');
+
+    const hudBadgeSpeed = document.getElementById('hud-badge-speed');
+    const hudSpeedLabel = document.getElementById('hud-speed-label');
+    const hudSpeedVal = document.getElementById('hud-speed-val');
+
+    const popoverCompareAge = document.getElementById('popover-compare-age');
+    const btnClosePopover = document.getElementById('btn-close-popover');
+    const compareOptBtns = document.querySelectorAll('.compare-opt-btn');
+
+    // Dynamic Card 3 Description
+    const cardMidpointDesc = document.getElementById('card-midpoint-desc');
+
+    // Canvas elements & Tooltip
+    const curveCanvas = document.getElementById('curve-canvas');
+    const lnCanvas = document.getElementById('ln-canvas');
+    const canvasTooltip = document.getElementById('canvas-tooltip');
+    const lifeBlocksGrid = document.getElementById('life-blocks-grid');
+
+    // Hourglass elements
+    const hgChronoVal = document.getElementById('hg-chrono-val');
+    const hgPerceivedVal = document.getElementById('hg-perceived-val');
+    const hgBarChrono = document.getElementById('hg-bar-chrono');
+    const hgBarPerceived = document.getElementById('hg-bar-perceived');
+    const spdCurAge = document.getElementById('spd-cur-age');
+    const spdTargetAge = document.getElementById('spd-target-age');
+    const spdResultText = document.getElementById('spd-result-text');
+
+    // Buttons
+    const presetButtons = document.querySelectorAll('.preset-btn');
+    const tabCurveBtn = document.getElementById('btn-tab-curve');
+    const tabLnBtn = document.getElementById('btn-tab-ln');
+    const tabGridBtn = document.getElementById('btn-tab-grid');
+    const tabHourglassBtn = document.getElementById('btn-tab-hourglass');
+
+    const viewCurve = document.getElementById('view-curve');
+    const viewLn = document.getElementById('view-ln');
+    const viewGrid = document.getElementById('view-grid');
+    const viewHourglass = document.getElementById('view-hourglass');
+
+    // Theoretical Info Drawer
+    const btnToggleInfo = document.getElementById('btn-toggle-info');
+    const btnCloseInfo = document.getElementById('btn-close-info');
+    const infoDrawer = document.getElementById('info-drawer');
+
+    // --- Math Functions ---
+
+    function fx(x) {
+        if (x <= 0) return 1.0;
+        return 1.0 / x;
+    }
+
+    function volumeIntegral(x) {
+        if (x <= minAge) return 0;
+        return Math.log(x) - Math.log(minAge);
+    }
+
+    function perceivedPercentage(age, N) {
+        const vAge = volumeIntegral(age);
+        const vMax = volumeIntegral(N);
+        if (vMax <= 0) return 0;
+        return Math.min(100, Math.max(0, (vAge / vMax) * 100));
+    }
+
+    function chronoPercentage(age, N) {
+        return Math.min(100, Math.max(0, (age / N) * 100));
+    }
+
+    function subjectiveMidpoint(N) {
+        return Math.sqrt(N);
+    }
+
+    function speedRatio(ageCurrent, ageTarget) {
+        if (ageTarget <= 0) return 1.0;
+        return ageCurrent / ageTarget;
+    }
+
+    // --- UI Update Pipeline ---
+
+    function updateAll() {
+        currentAge = parseInt(ageSlider.value, 10);
+        compareAge = parseInt(compareAgeInput ? compareAgeInput.value : 10, 10) || 10;
+
+        if (currentAge > maxAge) {
+            currentAge = maxAge;
+            ageSlider.value = maxAge;
+        }
+        ageSlider.max = maxAge;
+
+        const midpoint = subjectiveMidpoint(maxAge);
+        const chronoPct = chronoPercentage(currentAge, maxAge);
+        const percPct = perceivedPercentage(currentAge, maxAge);
+        const speed = speedRatio(currentAge, compareAge);
+        const intVal = volumeIntegral(currentAge);
+
+        // Control Displays
+        if (ageDisplay) ageDisplay.textContent = currentAge;
+
+        // Dynamic Card 3 Description
+        if (cardMidpointDesc) {
+            cardMidpointDesc.innerHTML = `Pour une vie de <strong>100 ans</strong>, la moitié exacte (<strong>50%</strong>) de votre perception de vie est déjà vécue dès l'âge de <strong>10,0 ans</strong> (calculé par √100) !`;
+        }
+
+        // Floating HUD Badges
+        if (hudPerceivedPct) hudPerceivedPct.textContent = `${percPct.toFixed(1)}%`;
+        if (hudPerceivedIntegral) hudPerceivedIntegral.textContent = `(ln ${currentAge} = ${intVal.toFixed(2)})`;
+        if (hudMidpointVal) hudMidpointVal.textContent = `${midpoint.toFixed(1)} ans`;
+        if (hudSpeedLabel) hudSpeedLabel.textContent = `vs ${compareAge}a :`;
+        if (hudSpeedVal) hudSpeedVal.textContent = `${speed.toFixed(1)}x`;
+
+        // Hourglass View
+        if (hgChronoVal) hgChronoVal.textContent = `${currentAge} / ${maxAge} ans`;
+        if (hgPerceivedVal) hgPerceivedVal.textContent = `${intVal.toFixed(2)} / ${volumeIntegral(maxAge).toFixed(2)} ln`;
+        if (hgBarChrono) {
+            hgBarChrono.style.width = `${chronoPct}%`;
+            hgBarChrono.textContent = `${chronoPct.toFixed(1)}%`;
+        }
+        if (hgBarPerceived) {
+            hgBarPerceived.style.width = `${percPct}%`;
+            hgBarPerceived.textContent = `${percPct.toFixed(1)}%`;
+        }
+        if (spdCurAge) spdCurAge.textContent = currentAge;
+        if (spdTargetAge) spdTargetAge.textContent = compareAge;
+        if (spdResultText) spdResultText.textContent = `${speed.toFixed(1)}x plus rapide`;
+
+        renderActiveView();
+    }
+
+    function renderActiveView() {
+        if (activeTab === 'curve') {
+            drawCurveCanvas();
+        } else if (activeTab === 'ln') {
+            drawLnCanvas();
+        } else if (activeTab === 'grid') {
+            renderLifeGrid();
+        }
+    }
+
+    // --- CANVAS RENDERING: Repère f(x) = 1/x ---
+
+    function drawCurveCanvas() {
+        if (!curveCanvas) return;
+        const ctx = curveCanvas.getContext('2d');
+        const rect = curveCanvas.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        curveCanvas.width = Math.floor(rect.width * dpr);
+        curveCanvas.height = Math.floor(rect.height * dpr);
+        ctx.scale(dpr, dpr);
+
+        const width = rect.width;
+        const height = rect.height;
+
+        const margin = { top: 60, right: 60, bottom: 65, left: 75 };
+        const graphW = Math.max(10, width - margin.left - margin.right);
+        const graphH = Math.max(10, height - margin.top - margin.bottom);
+
+        ctx.clearRect(0, 0, width, height);
+
+        const xMin = 1;
+        const xMax = maxAge;
+        const yMin = 0;
+        const yMax = 1.05;
+
+        function mapX(x) {
+            return margin.left + ((x - xMin) / (xMax - xMin)) * graphW;
+        }
+
+        function mapY(y) {
+            return margin.top + graphH - ((y - yMin) / (yMax - yMin)) * graphH;
+        }
+
+        // 1. Gridlines
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 12px JetBrains Mono, sans-serif';
+
+        // X Axis Ticks & Lines
+        const xStep = 10;
+        for (let x = 1; x <= xMax; x += xStep) {
+            const px = mapX(x);
+            ctx.beginPath();
+            ctx.moveTo(px, margin.top);
+            ctx.lineTo(px, margin.top + graphH);
+            ctx.stroke();
+
+            ctx.textAlign = 'center';
+            ctx.fillText(`${x}a`, px, margin.top + graphH + 24);
+        }
+
+        // Y Axis Ticks & Lines
+        const yTicks = [0, 0.1, 0.25, 0.5, 0.75, 1.0];
+        for (let y of yTicks) {
+            const py = mapY(y);
+            ctx.beginPath();
+            ctx.moveTo(margin.left, py);
+            ctx.lineTo(margin.left + graphW, py);
+            ctx.stroke();
+
+            ctx.textAlign = 'right';
+            ctx.fillText((y * 100).toFixed(0) + '%', margin.left - 12, py + 4);
+        }
+
+        // 2. Shaded Area Under Curve
+
+        // Past Area (Zone Vécue: 1 -> currentAge)
+        ctx.beginPath();
+        ctx.moveTo(mapX(1), mapY(0));
+
+        const stepsPast = 250;
+        for (let i = 0; i <= stepsPast; i++) {
+            const x = 1 + (i / stepsPast) * (currentAge - 1);
+            const y = fx(x);
+            ctx.lineTo(mapX(x), mapY(y));
+        }
+        ctx.lineTo(mapX(currentAge), mapY(0));
+        ctx.closePath();
+
+        const pastGrad = ctx.createLinearGradient(margin.left, 0, mapX(currentAge), 0);
+        pastGrad.addColorStop(0, 'rgba(124, 58, 237, 0.32)');
+        pastGrad.addColorStop(1, 'rgba(99, 102, 241, 0.22)');
+        ctx.fillStyle = pastGrad;
+        ctx.fill();
+
+        // Diagonal hatching
+        ctx.save();
+        ctx.clip();
+        ctx.strokeStyle = 'rgba(124, 58, 237, 0.12)';
+        ctx.lineWidth = 1.5;
+        for (let x = -height; x < width + height; x += 14) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x + height, height);
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // Future Area (Zone Restante)
+        if (currentAge < maxAge) {
+            ctx.beginPath();
+            ctx.moveTo(mapX(currentAge), mapY(0));
+
+            const stepsFuture = 250;
+            for (let i = 0; i <= stepsFuture; i++) {
+                const x = currentAge + (i / stepsFuture) * (maxAge - currentAge);
+                const y = fx(x);
+                ctx.lineTo(mapX(x), mapY(y));
+            }
+            ctx.lineTo(mapX(maxAge), mapY(0));
+            ctx.closePath();
+
+            ctx.fillStyle = 'rgba(241, 245, 249, 0.75)';
+            ctx.fill();
+        }
+
+        // 3. 1/x Curve Line
+        ctx.beginPath();
+        const totalSteps = 400;
+        for (let i = 0; i <= totalSteps; i++) {
+            const x = 1 + (i / totalSteps) * (maxAge - 1);
+            const y = fx(x);
+            const px = mapX(x);
+            const py = mapY(y);
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#7c3aed';
+        ctx.shadowColor = 'rgba(124, 58, 237, 0.35)';
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // 4. Subjective Midpoint Marker (sqrt(100) = 10)
+        const midX = subjectiveMidpoint(maxAge);
+        const midPx = mapX(midX);
+
+        ctx.save();
+        ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(midPx, margin.top);
+        ctx.lineTo(midPx, margin.top + graphH);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#b45309';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`★ Mi-vie (√100 = 10a)`, midPx, margin.top - 14);
+
+        // 5. Current Age Marker (Interactive Cursor)
+        const curPx = mapX(currentAge);
+        const curPy = mapY(fx(currentAge));
+
+        ctx.beginPath();
+        ctx.moveTo(curPx, margin.top);
+        ctx.lineTo(curPx, margin.top + graphH);
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(curPx, curPy, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#0284c7';
+        ctx.shadowColor = 'rgba(2, 132, 199, 0.5)';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = '#0284c7';
+        ctx.font = 'bold 13px Outfit, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Âge: ${currentAge} ans`, curPx, margin.top + graphH + 42);
+
+        // 6. Main Axes Lines & Annotations
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#94a3b8';
+
+        ctx.beginPath();
+        ctx.moveTo(margin.left, margin.top + graphH);
+        ctx.lineTo(margin.left + graphW + 20, margin.top + graphH);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(margin.left, margin.top - 20);
+        ctx.lineTo(margin.left, margin.top + graphH);
+        ctx.stroke();
+
+        ctx.fillStyle = '#334155';
+        ctx.font = '700 13px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('Âge réels en années (x) →', width - margin.right, height - 15);
+
+        ctx.save();
+        ctx.translate(24, margin.top + graphH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillText('Poids d\'une année f(x) = 1/x ↑', 0, 0);
+        ctx.restore();
+
+        // 7. Hover / Drag Cursor Logic
+        if (hoveredAge !== null && hoveredAge >= 1 && hoveredAge <= maxAge) {
+            const hPx = mapX(hoveredAge);
+            const hPy = mapY(fx(hoveredAge));
+
+            ctx.save();
+            ctx.setLineDash([2, 2]);
+            ctx.strokeStyle = '#ec4899';
+            ctx.beginPath();
+            ctx.moveTo(hPx, margin.top);
+            ctx.lineTo(hPx, margin.top + graphH);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.arc(hPx, hPy, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#ec4899';
+            ctx.fill();
+
+            if (canvasTooltip) {
+                const ttAge = document.getElementById('tt-age');
+                const ttWeight = document.getElementById('tt-weight');
+                const ttIntegral = document.getElementById('tt-integral');
+                const ttPct = document.getElementById('tt-pct');
+
+                ttAge.textContent = `${hoveredAge.toFixed(1)} ans`;
+                const w = fx(hoveredAge);
+                ttWeight.textContent = `${w.toFixed(3)} (${(w * 100).toFixed(1)}%)`;
+                const v = volumeIntegral(hoveredAge);
+                ttIntegral.textContent = v.toFixed(3);
+                const p = perceivedPercentage(hoveredAge, maxAge);
+                ttPct.textContent = `${p.toFixed(1)}%`;
+
+                canvasTooltip.classList.remove('hidden');
+                
+                let leftPos = hPx + 15;
+                if (leftPos + 220 > width) leftPos = hPx - 230;
+                let topPos = Math.max(15, hPy - 40);
+
+                canvasTooltip.style.left = `${leftPos}px`;
+                canvasTooltip.style.top = `${topPos}px`;
+            }
+        } else {
+            if (canvasTooltip) canvasTooltip.classList.add('hidden');
+        }
+    }
+
+    // Direct Canvas Drag & Mouse Move Events
+    if (curveCanvas) {
+        function updateAgeFromMouse(e) {
+            const rect = curveCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const width = rect.width;
+            const margin = { left: 75, right: 60 };
+            const graphW = width - margin.left - margin.right;
+
+            if (mouseX >= margin.left && mouseX <= margin.left + graphW) {
+                const xVal = minAge + ((mouseX - margin.left) / graphW) * (maxAge - minAge);
+                return Math.min(maxAge, Math.max(1, xVal));
+            }
+            return null;
+        }
+
+        curveCanvas.addEventListener('mousedown', (e) => {
+            isDraggingCanvas = true;
+            const ageVal = updateAgeFromMouse(e);
+            if (ageVal !== null) {
+                ageSlider.value = Math.round(ageVal);
+                updateAll();
+            }
+        });
+
+        curveCanvas.addEventListener('mousemove', (e) => {
+            const ageVal = updateAgeFromMouse(e);
+            hoveredAge = ageVal;
+
+            if (isDraggingCanvas && ageVal !== null) {
+                ageSlider.value = Math.round(ageVal);
+                updateAll();
+            } else {
+                drawCurveCanvas();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingCanvas = false;
+        });
+
+        curveCanvas.addEventListener('mouseleave', () => {
+            if (!isDraggingCanvas) {
+                hoveredAge = null;
+                drawCurveCanvas();
+            }
+        });
+    }
+
+    // --- CANVAS RENDERING WITH CLEAN ANNOTATIONS: V(x) = ln(x) ---
+
+    function drawLnCanvas() {
+        if (!lnCanvas) return;
+        const ctx = lnCanvas.getContext('2d');
+        const rect = lnCanvas.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        lnCanvas.width = Math.floor(rect.width * dpr);
+        lnCanvas.height = Math.floor(rect.height * dpr);
+        ctx.scale(dpr, dpr);
+
+        const width = rect.width;
+        const height = rect.height;
+        const margin = { top: 60, right: 60, bottom: 65, left: 85 };
+        const graphW = Math.max(10, width - margin.left - margin.right);
+        const graphH = Math.max(10, height - margin.top - margin.bottom);
+
+        ctx.clearRect(0, 0, width, height);
+
+        const maxVolume = volumeIntegral(maxAge);
+
+        function mapX(x) {
+            return margin.left + ((x - 1) / (maxAge - 1)) * graphW;
+        }
+
+        function mapY(v) {
+            return margin.top + graphH - (v / maxVolume) * graphH;
+        }
+
+        // 1. Gridlines
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 12px JetBrains Mono, sans-serif';
+
+        // 50% Midpoint Line
+        const halfY = mapY(maxVolume * 0.5);
+        ctx.save();
+        ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(margin.left, halfY);
+        ctx.lineTo(margin.left + graphW, halfY);
+        ctx.stroke();
+        ctx.restore();
+
+        const midX = subjectiveMidpoint(maxAge);
+        ctx.fillStyle = '#b45309';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(`★ 50% Volume Ressenti (√100 = 10a)`, margin.left + graphW - 10, halfY - 8);
+
+        // X Ticks
+        for (let x = 1; x <= maxAge; x += 10) {
+            const px = mapX(x);
+            ctx.beginPath();
+            ctx.moveTo(px, margin.top);
+            ctx.lineTo(px, margin.top + graphH);
+            ctx.stroke();
+
+            ctx.textAlign = 'center';
+            ctx.fillText(`${x}a`, px, margin.top + graphH + 24);
+        }
+
+        // Y Ticks
+        for (let v = 0; v <= maxVolume; v += 1) {
+            const py = mapY(v);
+            ctx.beginPath();
+            ctx.moveTo(margin.left, py);
+            ctx.lineTo(margin.left + graphW, py);
+            ctx.stroke();
+
+            ctx.textAlign = 'right';
+            ctx.fillText(`${v.toFixed(1)} ln`, margin.left - 12, py + 4);
+        }
+
+        // 2. PEDAGOGICAL ANNOTATIONS ON CANVAS
+
+        // A) Childhood Highlight Zone (1 -> 10 years)
+        const x10Px = mapX(10);
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.08)';
+        ctx.fillRect(margin.left, margin.top, x10Px - margin.left, graphH);
+
+        ctx.fillStyle = '#d97706';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('⚡ Zone Enfance (1-10a) : Pente Forte (50.0% du volume)', margin.left + 12, margin.top + 30);
+
+        // B) Equivalence Bracket Annotation (1->2a vs 20->40a)
+        const px20 = mapX(20);
+        const px40 = mapX(40);
+        const py20 = mapY(volumeIntegral(20));
+        const py40 = mapY(volumeIntegral(40));
+
+        ctx.save();
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+
+        ctx.beginPath();
+        ctx.moveTo(px20, py20);
+        ctx.lineTo(px40, py20);
+        ctx.lineTo(px40, py40);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#0284c7';
+        ctx.font = 'bold 12px Outfit, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('💡 Passer de 20a à 40a (20 ans !) = Même volume ressenti que 1a à 2a (1 an !)', px20 + 8, py20 + 22);
+
+        // 3. Shaded Past Volume
+        ctx.beginPath();
+        ctx.moveTo(mapX(1), mapY(0));
+        const steps = 250;
+        for (let i = 0; i <= steps; i++) {
+            const x = 1 + (i / steps) * (currentAge - 1);
+            const v = volumeIntegral(x);
+            ctx.lineTo(mapX(x), mapY(v));
+        }
+        ctx.lineTo(mapX(currentAge), mapY(0));
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(margin.left, 0, mapX(currentAge), 0);
+        grad.addColorStop(0, 'rgba(99, 102, 241, 0.35)');
+        grad.addColorStop(1, 'rgba(124, 58, 237, 0.25)');
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // 4. Draw ln(x) Curve Line
+        ctx.beginPath();
+        for (let i = 0; i <= steps; i++) {
+            const x = 1 + (i / steps) * (maxAge - 1);
+            const v = volumeIntegral(x);
+            const px = mapX(x);
+            const py = mapY(v);
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#4f46e5';
+        ctx.shadowColor = 'rgba(79, 70, 229, 0.4)';
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Current Age Node
+        const curPx = mapX(currentAge);
+        const curPy = mapY(volumeIntegral(currentAge));
+
+        ctx.beginPath();
+        ctx.arc(curPx, curPy, 7, 0, Math.PI * 2);
+        ctx.fillStyle = '#4f46e5';
+        ctx.fill();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+
+        // Axes
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#94a3b8';
+        ctx.beginPath();
+        ctx.moveTo(margin.left, margin.top + graphH);
+        ctx.lineTo(margin.left + graphW + 20, margin.top + graphH);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(margin.left, margin.top - 20);
+        ctx.lineTo(margin.left, margin.top + graphH);
+        ctx.stroke();
+
+        ctx.fillStyle = '#334155';
+        ctx.font = '700 13px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('Âge réels en années (x) →', width - margin.right, height - 15);
+
+        ctx.save();
+        ctx.translate(24, margin.top + graphH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillText('Volume cumulé V(x) = ln(x) ↑', 0, 0);
+        ctx.restore();
+    }
+
+    // --- LIFE BLOCKS GRID RENDERING WITH MOUSE OVER TOOLTIPS FOR EVERY YEAR ---
+
+    function renderLifeGrid() {
+        if (!lifeBlocksGrid) return;
+        lifeBlocksGrid.innerHTML = '';
+
+        const maxW = 1.0;
+        for (let year = 1; year <= maxAge; year++) {
+            const weight = fx(year);
+            const weightPct = weight * 100;
+            const isPassed = year <= currentAge;
+            const isMidpoint = Math.round(subjectiveMidpoint(maxAge)) === year;
+            const cumulativeVol = volumeIntegral(year);
+            const cumulativePct = perceivedPercentage(year, maxAge);
+
+            const isTopRow = year <= 20;
+            const popoverPosClass = isTopRow ? 'top-full mt-2' : 'bottom-full mb-2';
+
+            const block = document.createElement('div');
+            block.className = `life-block p-2.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all shadow-2xs relative group ${
+                isPassed 
+                    ? 'bg-purple-50 border-purple-200 text-purple-950 hover:bg-purple-100 hover:border-purple-300' 
+                    : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300 hover:bg-slate-50'
+            } ${isMidpoint ? 'ring-2 ring-amber-400 shadow-md shadow-amber-400/20' : ''}`;
+
+            const relativeHeight = Math.max(38, Math.min(100, Math.round((weight / maxW) * 100 + 35)));
+            block.style.minHeight = `${relativeHeight}px`;
+
+            // HTML content with rich Mouseover Tooltip for every year
+            block.innerHTML = `
+                <div class="flex items-center justify-between text-[10px] font-mono pointer-events-none">
+                    <span class="font-bold ${isPassed ? 'text-purple-700' : 'text-slate-400'}">An ${year}</span>
+                    ${isMidpoint ? '<span class="text-amber-600 font-bold text-xs">★</span>' : ''}
+                </div>
+                <div class="text-[11px] font-bold font-outfit mt-1 pointer-events-none ${isPassed ? 'text-purple-900' : 'text-slate-600'}">
+                    ${weightPct.toFixed(1)}%
+                </div>
+
+                <!-- RICH MOUSEOVER POPOVER FOR THIS YEAR -->
+                <div class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 ${popoverPosClass} w-64 bg-slate-950 text-white p-3 rounded-xl shadow-2xl z-50 pointer-events-none text-left space-y-1.5 border border-purple-500/50 backdrop-blur-xl transition-all">
+                    <div class="font-bold text-xs text-purple-300 border-b border-slate-800 pb-1 flex items-center justify-between">
+                        <span>An ${year} (${isPassed ? 'Déjà vécu' : 'À venir'})</span>
+                        ${isMidpoint ? '<span class="text-amber-400 font-mono text-[10px]">★ Mi-vie 50%</span>' : ''}
+                    </div>
+                    <div class="text-[11px] text-slate-300 space-y-1 font-sans leading-snug">
+                        <div>• <strong>Poids (1/x) :</strong> ${weightPct.toFixed(2)}% d'une vie antérieure</div>
+                        <div>• <strong>Volume cumulé :</strong> ln(${year}) = ${cumulativeVol.toFixed(2)} ln</div>
+                        <div>• <strong>Perception vécue :</strong> ${cumulativePct.toFixed(1)}% de toute une vie</div>
+                        <div class="p-1.5 bg-purple-950/90 rounded border border-purple-800/80 text-purple-200 text-[10px] mt-1 italic">
+                            ${year === 10 ? '★ Seuil des 50% de toute la vie ressentie !' : `1 an à ${year} ans paraît ${(year / compareAge).toFixed(1)}x plus rapide qu'à 10 ans.`}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            block.addEventListener('click', () => {
+                ageSlider.value = year;
+                updateAll();
+            });
+
+            lifeBlocksGrid.appendChild(block);
+        }
+    }
+
+    // --- Tab Switcher ---
+
+    function setActiveTab(tabName) {
+        activeTab = tabName;
+
+        [tabCurveBtn, tabLnBtn, tabGridBtn, tabHourglassBtn].forEach(btn => btn && btn.classList.remove('active'));
+        [viewCurve, viewLn, viewGrid, viewHourglass].forEach(panel => panel && panel.classList.add('hidden'));
+
+        if (tabName === 'curve') {
+            if (tabCurveBtn) tabCurveBtn.classList.add('active');
+            if (viewCurve) viewCurve.classList.remove('hidden');
+        } else if (tabName === 'ln') {
+            if (tabLnBtn) tabLnBtn.classList.add('active');
+            if (viewLn) viewLn.classList.remove('hidden');
+        } else if (tabName === 'grid') {
+            if (tabGridBtn) tabGridBtn.classList.add('active');
+            if (viewGrid) viewGrid.classList.remove('hidden');
+        } else if (tabName === 'hourglass') {
+            if (tabHourglassBtn) tabHourglassBtn.classList.add('active');
+            if (viewHourglass) viewHourglass.classList.remove('hidden');
+        }
+
+        setTimeout(renderActiveView, 50);
+    }
+
+    // --- INTERACTIVE HUD BUTTON HANDLERS ---
+
+    if (hudBadgePerceived) {
+        hudBadgePerceived.addEventListener('click', () => {
+            if (activeTab === 'curve') {
+                setActiveTab('ln');
+            } else {
+                setActiveTab('curve');
+            }
+        });
+    }
+
+    if (hudBadgeMidpoint) {
+        hudBadgeMidpoint.addEventListener('click', () => {
+            const midpointAge = Math.round(subjectiveMidpoint(maxAge));
+            ageSlider.value = midpointAge;
+            updateAll();
+        });
+    }
+
+    if (hudBadgeSpeed && popoverCompareAge) {
+        hudBadgeSpeed.addEventListener('click', (e) => {
+            e.stopPropagation();
+            popoverCompareAge.classList.toggle('hidden');
+        });
+
+        if (btnClosePopover) {
+            btnClosePopover.addEventListener('click', (e) => {
+                e.stopPropagation();
+                popoverCompareAge.classList.add('hidden');
+            });
+        }
+
+        compareOptBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetAgeVal = parseInt(btn.getAttribute('data-target'), 10);
+                if (targetAgeVal) {
+                    if (compareAgeInput) compareAgeInput.value = targetAgeVal;
+                    compareOptBtns.forEach(b => b.classList.remove('bg-sky-600', 'text-white'));
+                    btn.classList.add('bg-sky-600', 'text-white');
+                    popoverCompareAge.classList.add('hidden');
+                    updateAll();
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!popoverCompareAge.contains(e.target) && e.target !== hudBadgeSpeed) {
+                popoverCompareAge.classList.add('hidden');
+            }
+        });
+    }
+
+    // --- Theoretical Info Drawer Toggling ---
+
+    if (btnToggleInfo && infoDrawer) {
+        btnToggleInfo.addEventListener('click', () => {
+            infoDrawer.classList.toggle('hidden');
+        });
+    }
+
+    if (btnCloseInfo && infoDrawer) {
+        btnCloseInfo.addEventListener('click', () => {
+            infoDrawer.classList.add('hidden');
+        });
+    }
+
+    // --- Event Listeners Setup ---
+
+    if (ageSlider) ageSlider.addEventListener('input', updateAll);
+
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const ageVal = parseInt(btn.getAttribute('data-age'), 10);
+            if (ageVal) {
+                ageSlider.value = ageVal;
+                updateAll();
+            }
+        });
+    });
+
+    if (tabCurveBtn) tabCurveBtn.addEventListener('click', () => setActiveTab('curve'));
+    if (tabLnBtn) tabLnBtn.addEventListener('click', () => setActiveTab('ln'));
+    if (tabGridBtn) tabGridBtn.addEventListener('click', () => setActiveTab('grid'));
+    if (tabHourglassBtn) tabHourglassBtn.addEventListener('click', () => setActiveTab('hourglass'));
+
+    const resizeObserver = new ResizeObserver(() => {
+        renderActiveView();
+    });
+
+    if (curveCanvas) resizeObserver.observe(curveCanvas.parentElement);
+    if (lnCanvas) resizeObserver.observe(lnCanvas.parentElement);
+
+    window.addEventListener('resize', () => {
+        renderActiveView();
+    });
+
+    setTimeout(updateAll, 50);
+});
