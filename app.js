@@ -143,9 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hudSpeedLabel) hudSpeedLabel.textContent = `Semaine vs ${compareAge}a :`;
         if (hudSpeedVal) hudSpeedVal.textContent = `${daysFormatted} j`;
 
-        // Update Hourglass View
-        if (hgChronoVal) hgChronoVal.textContent = `${currentAge} / ${maxAge} ans`;
-        if (hgPerceivedVal) hgPerceivedVal.textContent = `${curVol.toFixed(2)} / ${maxVol.toFixed(2)} ln`;
+
 
         const chronoPct = (currentAge / maxAge) * 100.0;
         if (hgBarChrono) {
