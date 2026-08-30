@@ -104,6 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return (7.0 * referenceAge) / age;
     }
 
+    function updateSliderBackground(val) {
+        if (!ageSlider) return;
+        const min = parseInt(ageSlider.min, 10) || 1;
+        const max = parseInt(ageSlider.max, 10) || 100;
+        const pct = ((val - min) / (max - min)) * 100;
+        ageSlider.style.background = `linear-gradient(to right, #7c3aed 0%, #6366f1 ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
+    }
+
     // --- App Update Logic ---
 
     function updateAll() {
@@ -111,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (compareAgeInput) compareAge = parseInt(compareAgeInput.value, 10) || 10;
 
         if (ageDisplay) ageDisplay.textContent = currentAge;
+        updateSliderBackground(currentAge);
 
         const percPct = perceivedPercentage(currentAge, maxAge);
         const curVol = volumeIntegral(currentAge);

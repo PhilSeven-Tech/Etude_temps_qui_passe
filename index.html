@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
@@ -340,13 +340,21 @@
                 <!-- Age Control Slider -->
                 <div class="flex items-center gap-2 sm:gap-4 w-full sm:w-auto flex-1 max-w-xl">
                     <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500">Âge :</span>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-purple-600"></i> Âge :
+                        </span>
                         <span id="age-display" class="text-xl sm:text-2xl font-extrabold font-outfit text-purple-700 min-w-[35px] sm:min-w-[45px]">40</span>
                         <span class="text-[10px] sm:text-xs font-medium text-slate-400">ans</span>
                     </div>
 
-                    <input type="range" id="age-slider" min="1" max="100" value="40" step="1" 
-                           class="w-full h-2.5 sm:h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-600 hover:accent-purple-500 transition-all">
+                    <!-- Slider with 1a and 100a Endpoint Markers -->
+                    <div class="flex items-center gap-2 flex-1 w-full">
+                        <span class="text-[10px] sm:text-xs font-bold font-mono text-purple-700 shrink-0">1a</span>
+                        <input type="range" id="age-slider" min="1" max="100" value="40" step="1" 
+                               class="w-full h-3 rounded-full appearance-none cursor-pointer border border-slate-300/80 shadow-inner"
+                               title="Glissez pour changer l'âge de 1 à 100 ans">
+                        <span class="text-[10px] sm:text-xs font-bold font-mono text-slate-400 shrink-0">100a</span>
+                    </div>
                 </div>
 
                 <!-- Presets Pills & Discrete Copyright Link -->
@@ -407,7 +415,7 @@
     </main>
 
     <!-- App Script -->
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
     <script>
         lucide.createIcons();
     </script>
