@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Dynamic Week Perception Badge Floating ABOVE the Point on curve-canvas
         const curWDays = perceivedWeekDays(currentAge, compareAge);
-        const curUnit = curWDays >= 2.0 ? 'jours' : 'jour';
+        const curUnit = curWDays >= 2.0 ? 'jours ressentis' : 'jour ressenti';
         const curveLabelText = `1 semaine = ${curWDays.toFixed(1).replace('.', ',')} ${curUnit}`;
 
         ctx.font = `bold ${isMobile ? '10px' : '12px'} JetBrains Mono, Inter, sans-serif`;
@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (ttAge) ttAge.textContent = `${hoveredAge.toFixed(0)} ans`;
                 if (ttWeek) {
                     const wDays = perceivedWeekDays(hoveredAge, compareAge);
-                    const unit = wDays >= 2.0 ? 'jours' : 'jour';
+                    const unit = wDays >= 2.0 ? 'jours ressentis' : 'jour ressenti';
                     ttWeek.textContent = `${wDays.toFixed(1).replace('.', ',')} ${unit}`;
                 }
 
