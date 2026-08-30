@@ -293,8 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.stroke();
         ctx.restore();
 
-        // (Overlapping orange text removed to leave legend pill unobstructed)
-
         // 5. Current Age Marker (Interactive Cursor)
         const curPx = mapX(currentAge);
         const curPy = mapY(fx(currentAge));
@@ -481,10 +479,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const height = rect.height;
         const isMobile = width < 640;
         const margin = { 
-            top: isMobile ? 45 : 60, 
+            top: isMobile ? 25 : 60, 
             right: isMobile ? 25 : 60, 
-            bottom: isMobile ? 50 : 65, 
-            left: isMobile ? 50 : 85 
+            bottom: isMobile ? 45 : 65, 
+            left: isMobile ? 45 : 85 
         };
         const graphW = Math.max(10, width - margin.left - margin.right);
         const graphH = Math.max(10, height - margin.top - margin.bottom);
@@ -704,6 +702,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         [tabCurveBtn, tabLnBtn, tabGridBtn, tabHourglassBtn].forEach(btn => btn && btn.classList.remove('active'));
         [viewCurve, viewLn, viewGrid, viewHourglass].forEach(panel => panel && panel.classList.add('hidden'));
+
+        const hudButtonsRow = document.getElementById('hud-buttons-row');
+        const isMobile = window.innerWidth < 640;
+
+        if (hudButtonsRow) {
+            if (isMobile && tabName === 'ln') {
+                hudButtonsRow.classList.add('hidden');
+            } else {
+                hudButtonsRow.classList.remove('hidden');
+            }
+        }
 
         if (tabName === 'curve') {
             if (tabCurveBtn) tabCurveBtn.classList.add('active');
