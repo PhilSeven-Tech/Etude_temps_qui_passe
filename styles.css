@@ -140,3 +140,19 @@ input[type=range]::-moz-range-thumb:hover {
         padding: 8px 10px;
     }
 }
+
+/* Pourquoi √N Popover Hover & Active Display */
+.why-sqrt-popover {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.relative:hover > .why-sqrt-popover,
+.why-sqrt-popover:hover,
+.why-sqrt-popover.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}

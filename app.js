@@ -835,21 +835,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseWhySqrt = document.getElementById('btn-close-why-sqrt');
 
     if (btnWhySqrt && popoverWhySqrt) {
+        btnWhySqrt.addEventListener('mouseenter', () => {
+            popoverWhySqrt.classList.add('active');
+        });
+
+        if (btnWhySqrt.parentElement) {
+            btnWhySqrt.parentElement.addEventListener('mouseleave', () => {
+                popoverWhySqrt.classList.remove('active');
+            });
+        }
+
         btnWhySqrt.addEventListener('click', (e) => {
             e.stopPropagation();
-            popoverWhySqrt.classList.toggle('hidden');
+            popoverWhySqrt.classList.toggle('active');
         });
 
         if (btnCloseWhySqrt) {
             btnCloseWhySqrt.addEventListener('click', (e) => {
                 e.stopPropagation();
-                popoverWhySqrt.classList.add('hidden');
+                popoverWhySqrt.classList.remove('active');
             });
         }
 
         document.addEventListener('click', (e) => {
             if (!popoverWhySqrt.contains(e.target) && !btnWhySqrt.contains(e.target)) {
-                popoverWhySqrt.classList.add('hidden');
+                popoverWhySqrt.classList.remove('active');
             }
         });
     }
