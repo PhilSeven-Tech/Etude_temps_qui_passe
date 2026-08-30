@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
@@ -107,11 +107,11 @@
         </div>
     </header>
 
-    <!-- MAIN WORKSPACE: 100% FULL VIEWPORT HERO CANVAS ON PC / RESPONSIVE 58VH ON SMARTPHONE -->
-    <main class="flex-1 p-2 sm:p-4 relative flex flex-col justify-between gap-2 sm:gap-4 min-h-0 w-full h-full overflow-hidden">
+    <!-- MAIN WORKSPACE: 100% FULL VIEWPORT HERO CANVAS ON ALL SCREENS -->
+    <main class="flex-1 p-1.5 sm:p-4 relative flex flex-col justify-between gap-1.5 sm:gap-4 min-h-0 w-full h-full overflow-hidden">
         
         <!-- CENTRAL HERO GRAPH CONTAINER -->
-        <div id="graph-wrapper" class="h-[58vh] sm:h-full sm:flex-1 w-full bg-white rounded-xl sm:rounded-2xl border border-slate-300 shadow-lg sm:shadow-xl relative overflow-hidden flex flex-col min-h-0">
+        <div id="graph-wrapper" class="flex-1 w-full bg-white rounded-xl sm:rounded-2xl border border-slate-300 shadow-lg sm:shadow-xl relative overflow-hidden flex flex-col min-h-0">
             
             <!-- Canvas View Area -->
             <div class="relative flex-1 w-full h-full min-h-0 overflow-hidden">
@@ -221,25 +221,25 @@
                 </div>
 
                 <!-- VIEW 4: Hourglass Comparateur -->
-                <div id="view-hourglass" class="view-panel absolute inset-0 w-full h-full hidden p-3 sm:p-8 overflow-y-auto bg-slate-50/50 flex flex-col justify-center max-w-4xl mx-auto space-y-3 sm:space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
-                        <div class="bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm space-y-2 sm:space-y-4">
+                <div id="view-hourglass" class="view-panel absolute inset-0 w-full h-full hidden p-2 sm:p-8 overflow-y-auto bg-slate-50/50 flex flex-col justify-start sm:justify-center max-w-4xl mx-auto space-y-2.5 sm:space-y-6 custom-scrollbar">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-6">
+                        <div class="bg-white p-3 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm space-y-2 sm:space-y-4">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2">
-                                    <i data-lucide="calendar" class="w-4 h-4 text-blue-600"></i> Temps Chronologique (Linéaire)
+                                <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-blue-600 shrink-0"></i> Temps Chronologique (Linéaire)
                                 </h3>
-                                <span id="hg-chrono-val" class="font-mono text-xs font-bold text-slate-600">40 / 100 ans</span>
+                                <span id="hg-chrono-val" class="font-mono text-xs font-bold text-slate-600 shrink-0 whitespace-nowrap">40 / 100 ans</span>
                             </div>
                             <div class="w-full bg-slate-100 h-5 sm:h-6 rounded-lg overflow-hidden border border-slate-200">
                                 <div id="hg-bar-chrono" class="bg-blue-600 h-full text-white text-[10px] font-bold flex items-center justify-end px-2" style="width: 40%;">40.0%</div>
                             </div>
                         </div>
-                        <div class="bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl border border-purple-200 shadow-sm space-y-2 sm:space-y-4">
+                        <div class="bg-white p-3 sm:p-6 rounded-xl sm:rounded-2xl border border-purple-200 shadow-sm space-y-2 sm:space-y-4">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2">
-                                    <i data-lucide="brain" class="w-4 h-4 text-purple-600"></i> Temps Subjectif (Loi de Janet)
+                                <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                                    <i data-lucide="brain" class="w-4 h-4 text-purple-600 shrink-0"></i> Temps Subjectif (Loi de Janet)
                                 </h3>
-                                <span id="hg-perceived-val" class="font-mono text-xs font-bold text-purple-700">3.69 / 4.61 ln</span>
+                                <span id="hg-perceived-val" class="font-mono text-xs font-bold text-purple-700 shrink-0 whitespace-nowrap">3.69 / 4.61 ln</span>
                             </div>
                             <div class="w-full bg-slate-100 h-5 sm:h-6 rounded-lg overflow-hidden border border-purple-200">
                                 <div id="hg-bar-perceived" class="bg-gradient-to-r from-purple-600 to-indigo-600 h-full text-white text-[10px] font-bold flex items-center justify-end px-2" style="width: 80%;">80.0%</div>
@@ -247,25 +247,25 @@
                         </div>
                     </div>
 
-                    <div class="p-3.5 sm:p-6 bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div class="p-3 sm:p-6 bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                         <div class="flex items-center gap-2 sm:gap-3">
-                            <div class="p-2 sm:p-3 bg-purple-50 rounded-xl text-purple-600 border border-purple-100"><i data-lucide="calendar" class="w-4 h-4 sm:w-5 sm:h-5"></i></div>
+                            <div class="p-2 sm:p-3 bg-purple-50 rounded-xl text-purple-600 border border-purple-100 shrink-0"><i data-lucide="calendar" class="w-4 h-4 sm:w-5 sm:h-5"></i></div>
                             <div>
                                 <h4 class="text-xs sm:text-sm font-bold text-slate-900">Perception d'une semaine</h4>
                                 <p class="text-[10px] sm:text-xs text-slate-500">À <span id="spd-target-age" class="font-bold text-sky-600">10</span> ans la semaine faisait 7 jours, aujourd'hui à <span id="spd-cur-age" class="font-bold text-purple-700">40</span> ans elle paraît en avoir :</p>
                             </div>
                         </div>
-                        <div id="spd-result-text" class="text-lg sm:text-2xl font-black font-outfit text-purple-700">1,8 jour</div>
+                        <div id="spd-result-text" class="text-base sm:text-2xl font-black font-outfit text-purple-700 whitespace-nowrap shrink-0 ml-2">1,8 jour</div>
                     </div>
                 </div>
 
-                <!-- FLOATING HORIZONTAL HUD BUTTONS ROW (Hidden on smartphone inside view-ln to avoid overlapping dark box) -->
-                <div id="hud-buttons-row" class="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 flex flex-row items-center justify-end gap-1.5 sm:gap-3 pointer-events-none transition-all">
+                <!-- FLOATING HORIZONTAL HUD BUTTONS ROW -->
+                <div id="hud-buttons-row" class="absolute top-1.5 left-1.5 right-1.5 sm:left-auto sm:top-4 sm:right-4 z-20 flex flex-row items-center justify-between sm:justify-end gap-1 sm:gap-3 pointer-events-none transition-all">
                     
                     <!-- BUTTON 1: Perceived Volume Badge -->
-                    <button id="hud-badge-perceived" class="glass-pill px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-purple-200 bg-white/95 shadow-md backdrop-blur-md flex items-center gap-1.5 sm:gap-2.5 hover:scale-[1.03] transition-all cursor-pointer pointer-events-auto group" title="Cliquer pour basculer de vue">
-                        <div class="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-extrabold text-[10px] sm:text-xs shadow-2xs">∫</div>
-                        <div class="flex items-center gap-1 sm:gap-2">
+                    <button id="hud-badge-perceived" class="glass-pill px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-purple-200 bg-white/95 shadow-md backdrop-blur-md flex items-center gap-1 sm:gap-2.5 hover:scale-[1.03] transition-all cursor-pointer pointer-events-auto group whitespace-nowrap" title="Cliquer pour basculer de vue">
+                        <div class="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-extrabold text-[10px] sm:text-xs shadow-2xs shrink-0">∫</div>
+                        <div class="flex items-center gap-1 sm:gap-2 whitespace-nowrap">
                             <span class="hidden sm:inline text-[11px] font-bold text-slate-600">Volume Ressenti :</span>
                             <span id="hud-perceived-pct" class="text-xs sm:text-base font-extrabold font-outfit text-purple-700">80.1%</span>
                             <span id="hud-perceived-integral" class="hidden sm:inline text-[11px] font-mono text-slate-400">(ln 40 = 3.69)</span>
@@ -273,12 +273,12 @@
                     </button>
 
                     <!-- BUTTON 2: Subjective Midpoint Badge with Mouseover Tooltip -->
-                    <div class="relative pointer-events-auto group">
-                        <button id="hud-badge-midpoint" class="glass-pill px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-amber-200 bg-white/95 shadow-md backdrop-blur-md flex items-center gap-1.5 sm:gap-2.5 hover:scale-[1.03] transition-all cursor-pointer text-left" title="Cliquer pour placer l'âge à 10a (Mi-vie 50%)">
-                            <span class="text-[10px] sm:text-xs font-semibold text-amber-900 flex items-center gap-1">
-                                <i data-lucide="star" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 fill-amber-500"></i> <span class="hidden sm:inline">Mi-vie (√100) :</span><span class="sm:hidden">√100 :</span>
+                    <div class="relative pointer-events-auto group shrink-0">
+                        <button id="hud-badge-midpoint" class="glass-pill px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-amber-200 bg-white/95 shadow-md backdrop-blur-md flex items-center gap-1 sm:gap-2.5 hover:scale-[1.03] transition-all cursor-pointer text-left whitespace-nowrap" title="Cliquer pour placer l'âge à 10a (Mi-vie 50%)">
+                            <span class="text-[10px] sm:text-xs font-semibold text-amber-900 flex items-center gap-1 whitespace-nowrap">
+                                <i data-lucide="star" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 fill-amber-500 shrink-0"></i> <span class="hidden sm:inline">Mi-vie (√100) :</span><span class="sm:hidden">√100 :</span>
                             </span>
-                            <span id="hud-midpoint-val" class="text-[10px] sm:text-xs font-bold font-mono text-amber-800 bg-amber-50 px-1.5 sm:px-2 py-0.5 rounded border border-amber-200">10.0 ans</span>
+                            <span id="hud-midpoint-val" class="text-[10px] sm:text-xs font-bold font-mono text-amber-800 bg-amber-50 px-1 sm:px-2 py-0.5 rounded border border-amber-200 whitespace-nowrap">10.0 ans</span>
                         </button>
 
                         <!-- HUD BUTTON MOUSE OVER TOOLTIP -->
@@ -294,12 +294,12 @@
                     </div>
 
                     <!-- BUTTON 3: Acceleration Ratio Badge -->
-                    <div class="relative pointer-events-auto">
-                        <button id="hud-badge-speed" class="glass-pill px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-sky-200 bg-white/95 shadow-md backdrop-blur-md flex items-center gap-1.5 sm:gap-2.5 hover:scale-[1.03] transition-all cursor-pointer group" title="Cliquer pour modifier l'âge de comparaison (actuellement 10a)">
-                            <span class="text-[10px] sm:text-xs font-semibold text-sky-900 flex items-center gap-1">
-                                <i data-lucide="calendar" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-600"></i> <span id="hud-speed-label">Semaine vs 10a :</span>
+                    <div class="relative pointer-events-auto group shrink-0">
+                        <button id="hud-badge-speed" class="glass-pill px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-sky-200 bg-white/95 shadow-md backdrop-blur-md flex items-center gap-1 sm:gap-2.5 hover:scale-[1.03] transition-all cursor-pointer group whitespace-nowrap" title="Cliquer pour modifier l'âge de comparaison (actuellement 10a)">
+                            <span class="text-[10px] sm:text-xs font-semibold text-sky-900 flex items-center gap-1 whitespace-nowrap">
+                                <i data-lucide="calendar" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-600 shrink-0"></i> <span id="hud-speed-label" class="hidden sm:inline">Semaine vs 10a :</span><span class="sm:hidden">vs 10a :</span>
                             </span>
-                            <span id="hud-speed-val" class="text-[10px] sm:text-xs font-bold font-mono text-sky-700 bg-sky-50 px-1.5 sm:px-2 py-0.5 rounded border border-sky-200">1,8 j</span>
+                            <span id="hud-speed-val" class="text-[10px] sm:text-xs font-bold font-mono text-sky-700 bg-sky-50 px-1 sm:px-2 py-0.5 rounded border border-sky-200 whitespace-nowrap">1,8 j</span>
                         </button>
 
                         <!-- Mini Popover Menu -->
@@ -352,13 +352,13 @@
                 <div class="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 w-full sm:w-auto shrink-0">
                     <div class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                         <span class="hidden sm:inline text-[11px] font-semibold text-slate-400 mr-1">Raccourcis :</span>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="10">10a (Mi-vie 50%)</button>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="18">18a</button>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="30">30a</button>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="40">40a</button>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="50">50a</button>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="65">65a</button>
-                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs" data-age="100">100a</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="10">10a (Mi-vie 50%)</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="18">18a</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="30">30a</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="40">40a</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="50">50a</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="65">65a</button>
+                        <button class="preset-btn text-[10.5px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 font-semibold border border-slate-200 transition-all shrink-0 shadow-2xs whitespace-nowrap" data-age="100">100a</button>
                     </div>
 
                     <!-- Discrete Copyright Notice & Precossi.fr Link -->
@@ -406,7 +406,7 @@
     </main>
 
     <!-- App Script -->
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=3"></script>
     <script>
         lucide.createIcons();
     </script>
