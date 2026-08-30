@@ -141,17 +141,4 @@ input[type=range]::-moz-range-thumb:hover {
     }
 }
 
-/* Pourquoi √N Modal Overlay Display (100% Foreground) */
-.why-sqrt-popover {
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
-    z-index: 9999 !important;
-}
 
-.why-sqrt-popover.active {
-    display: flex !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}

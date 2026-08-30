@@ -829,42 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Why Sqrt Top-Level Modal Handler (Intégrale tab) ---
-    const btnWhySqrt = document.getElementById('btn-why-sqrt');
-    const popoverWhySqrt = document.getElementById('popover-why-sqrt');
-    const btnCloseWhySqrt = document.getElementById('btn-close-why-sqrt');
-    const btnCloseWhySqrtFooter = document.getElementById('btn-close-why-sqrt-footer');
 
-    if (btnWhySqrt && popoverWhySqrt) {
-        btnWhySqrt.addEventListener('mouseenter', () => {
-            popoverWhySqrt.classList.add('active');
-        });
-
-        btnWhySqrt.addEventListener('click', (e) => {
-            e.stopPropagation();
-            popoverWhySqrt.classList.toggle('active');
-        });
-
-        if (btnCloseWhySqrt) {
-            btnCloseWhySqrt.addEventListener('click', (e) => {
-                e.stopPropagation();
-                popoverWhySqrt.classList.remove('active');
-            });
-        }
-
-        if (btnCloseWhySqrtFooter) {
-            btnCloseWhySqrtFooter.addEventListener('click', (e) => {
-                e.stopPropagation();
-                popoverWhySqrt.classList.remove('active');
-            });
-        }
-
-        popoverWhySqrt.addEventListener('click', (e) => {
-            if (e.target === popoverWhySqrt) {
-                popoverWhySqrt.classList.remove('active');
-            }
-        });
-    }
 
     // --- Event Listeners Setup ---
 
