@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.strokeStyle = '#7c3aed';
         ctx.stroke();
 
-        // 4. Subjective Midpoint Marker (sqrt(100) = 10)
+        // 4. Subjective Midpoint Marker (sqrt(100) = 10) - Dashed vertical line
         const midX = subjectiveMidpoint(maxAge);
         const midPx = mapX(midX);
 
@@ -293,10 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.stroke();
         ctx.restore();
 
-        ctx.fillStyle = '#b45309';
-        ctx.font = `bold ${isMobile ? '10px' : '12px'} Inter, sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.fillText(`★ Mi-vie (√100 = 10a)`, midPx, margin.top - 10);
+        // (Overlapping orange text removed to leave legend pill unobstructed)
 
         // 5. Current Age Marker (Interactive Cursor)
         const curPx = mapX(currentAge);
