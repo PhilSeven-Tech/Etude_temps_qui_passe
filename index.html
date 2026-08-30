@@ -44,62 +44,69 @@
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen w-screen flex flex-col overflow-hidden font-sans antialiased select-none">
     
-    <!-- Ultra-Clean Responsive Top Navbar -->
-    <header class="h-12 sm:h-14 bg-white/95 border-b border-slate-200 px-2.5 sm:px-6 flex items-center justify-between shrink-0 z-30 shadow-xs">
-        <div class="flex items-center gap-2 shrink-0">
-            <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-gradient-to-tr from-purple-600 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-sm shrink-0">
-                <i data-lucide="line-chart" class="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5"></i>
-            </div>
-            <div class="flex items-baseline gap-1.5">
-                <h1 class="text-xs sm:text-base font-bold font-outfit text-slate-900 tracking-tight">Étude du temps qui passe</h1>
-                <span class="hidden sm:inline text-xs font-mono font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 shrink-0">
+    <!-- 2-ROW MOBILE HEADER / 1-ROW DESKTOP HEADER -->
+    <header class="bg-white/95 border-b border-slate-200 px-3 sm:px-6 py-2 sm:py-0 shrink-0 z-30 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-0 sm:h-14">
+        
+        <!-- ROW 1 (Mobile Title & Precossi Link) -->
+        <div class="flex items-center justify-between w-full sm:w-auto shrink-0">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-tr from-purple-600 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-sm shrink-0">
+                    <i data-lucide="line-chart" class="w-4 h-4 sm:w-4.5 sm:h-4.5"></i>
+                </div>
+                <h1 class="text-sm sm:text-base font-bold font-outfit text-slate-900 tracking-tight">Étude du temps qui passe</h1>
+                <span class="hidden md:inline text-xs font-mono font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 shrink-0">
                     f(x) = 1/x · Paul Janet
                 </span>
             </div>
+
+            <!-- Precossi.fr Link (Mobile Right) -->
+            <a href="https://precossi.fr" target="_blank" rel="noopener noreferrer" 
+               class="sm:hidden text-[10px] font-semibold text-slate-600 bg-slate-100 hover:bg-purple-50 px-2 py-1 rounded-md border border-slate-200 flex items-center gap-1 shrink-0">
+                <span class="font-bold text-slate-800">Precossi.fr</span>
+                <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-400"></i>
+            </a>
         </div>
 
-        <!-- View Switcher Tabs (Ultra-Clean Touch Bar) -->
-        <nav class="flex items-center gap-0.5 sm:gap-1 bg-slate-100 p-0.5 sm:p-1 rounded-lg sm:rounded-xl border border-slate-200 shadow-inner overflow-x-auto no-scrollbar max-w-[42vw] sm:max-w-none shrink-0">
-            <button id="btn-tab-curve" class="tab-btn active text-[10px] sm:text-xs font-semibold px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg flex items-center gap-1 shrink-0 transition-all">
-                <i data-lucide="area-chart" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-                <span class="whitespace-nowrap sm:inline">Repère</span>
+        <!-- ROW 2 ON MOBILE / CENTER ON DESKTOP: Navigation Tabs -->
+        <nav class="flex items-center justify-center sm:justify-start gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner overflow-x-auto no-scrollbar w-full sm:w-auto shrink-0">
+            <button id="btn-tab-curve" class="tab-btn active text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shrink-0 transition-all flex-1 sm:flex-none">
+                <i data-lucide="area-chart" class="w-3.5 h-3.5"></i>
+                <span>Repère</span>
             </button>
-            <button id="btn-tab-ln" class="tab-btn text-[10px] sm:text-xs font-semibold px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg flex items-center gap-1 shrink-0 transition-all">
-                <i data-lucide="trending-up" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-                <span class="whitespace-nowrap sm:inline">Intégrale</span>
+            <button id="btn-tab-ln" class="tab-btn text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shrink-0 transition-all flex-1 sm:flex-none">
+                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                <span>Intégrale</span>
             </button>
-            <button id="btn-tab-grid" class="tab-btn text-[10px] sm:text-xs font-semibold px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg flex items-center gap-1 shrink-0 transition-all">
-                <i data-lucide="grid" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-                <span class="whitespace-nowrap sm:inline">Grille</span>
+            <button id="btn-tab-grid" class="tab-btn text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shrink-0 transition-all flex-1 sm:flex-none">
+                <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                <span>Grille</span>
             </button>
-            <button id="btn-tab-hourglass" class="tab-btn text-[10px] sm:text-xs font-semibold px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg flex items-center gap-1 shrink-0 transition-all">
-                <i data-lucide="clock" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-                <span class="whitespace-nowrap sm:inline">Comparateur</span>
+            <button id="btn-tab-hourglass" class="tab-btn text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shrink-0 transition-all flex-1 sm:flex-none">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                <span>Comparateur</span>
             </button>
         </nav>
 
-        <!-- Right Side Actions: Precossi.fr Badge + Info Toggle -->
-        <div class="flex items-center gap-1.5 shrink-0">
+        <!-- DESKTOP RIGHT SIDE: Precossi.fr + Info Drawer Button -->
+        <div class="hidden sm:flex items-center gap-2 shrink-0">
             <a href="https://precossi.fr" target="_blank" rel="noopener noreferrer" 
-               class="text-[10px] sm:text-[11px] font-semibold text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-slate-200 flex items-center gap-1 transition-all"
-               title="Visiter Precossi.fr">
-                <span class="hidden sm:inline text-slate-400 font-normal">Un projet</span>
+               class="text-[11px] font-semibold text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-2.5 py-1.5 rounded-lg border border-slate-200 flex items-center gap-1 transition-all shadow-2xs">
+                <span class="text-slate-400 font-normal">Un projet</span>
                 <span class="font-bold text-slate-800 hover:text-purple-700">Precossi.fr</span>
-                <i data-lucide="external-link" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-400"></i>
+                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
             </a>
-
-            <button id="btn-toggle-info" class="hidden md:flex text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 items-center gap-1 transition-all shrink-0">
+            <button id="btn-toggle-info" class="hidden md:flex text-xs font-medium px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 items-center gap-1.5 transition-all shadow-2xs shrink-0">
                 <i data-lucide="info" class="w-3.5 h-3.5 text-purple-600"></i>
                 <span>Théorie</span>
             </button>
         </div>
     </header>
 
-    <!-- Main Workspace (Hero Canvas on Desktop / Responsive Touch Canvas on Mobile) -->
-    <main class="flex-1 p-1.5 sm:p-4 relative flex flex-col min-h-0 w-full h-full overflow-hidden">
+    <!-- Main Workspace (Responsive Graph Height on Mobile for Perfect Bottom Visibility) -->
+    <main class="flex-1 p-2 sm:p-4 relative flex flex-col justify-between gap-2 sm:gap-4 min-h-0 w-full h-full overflow-hidden">
         
-        <!-- CENTRAL HERO GRAPH CONTAINER -->
-        <div id="graph-wrapper" class="flex-1 w-full h-full bg-white rounded-lg sm:rounded-2xl border border-slate-300 shadow-lg sm:shadow-xl relative overflow-hidden flex flex-col min-h-0">
+        <!-- CENTRAL HERO GRAPH CONTAINER (Controlled height on mobile: 51vh) -->
+        <div id="graph-wrapper" class="h-[51vh] sm:h-full sm:flex-1 w-full bg-white rounded-xl sm:rounded-2xl border border-slate-300 shadow-lg sm:shadow-xl relative overflow-hidden flex flex-col min-h-0">
             
             <!-- Canvas View Area -->
             <div class="relative flex-1 w-full h-full min-h-0 overflow-hidden">
@@ -108,7 +115,7 @@
                 <div id="view-curve" class="view-panel absolute inset-0 w-full h-full">
                     <canvas id="curve-canvas" class="w-full h-full block cursor-crosshair touch-none"></canvas>
                     
-                    <!-- FLOATING LEGEND OVERLAY (Desktops only, hidden on mobile for total chart clarity) -->
+                    <!-- FLOATING LEGEND OVERLAY (Desktops only) -->
                     <div class="hidden sm:flex absolute top-4 left-4 z-20 glass-pill px-4 py-2 rounded-xl border border-slate-200 bg-white/90 shadow-md backdrop-blur-md items-center gap-4 text-xs font-semibold">
                         <div class="flex items-center gap-1.5">
                             <span class="w-3.5 h-3.5 rounded bg-purple-600 shadow-xs inline-block"></span>
@@ -129,7 +136,7 @@
                 <div id="view-ln" class="view-panel absolute inset-0 w-full h-full hidden flex flex-col bg-white overflow-hidden">
                     
                     <!-- Compact Responsive Header Bar -->
-                    <div class="bg-slate-900 text-white p-2.5 sm:p-4 px-3 sm:px-6 shrink-0 border-b border-slate-800 shadow-sm z-10 w-full text-left max-h-[35vh] sm:max-h-[45vh] overflow-y-auto custom-scrollbar">
+                    <div class="bg-slate-900 text-white p-2.5 sm:p-4 px-3 sm:px-6 shrink-0 border-b border-slate-800 shadow-sm z-10 w-full text-left max-h-[30vh] sm:max-h-[45vh] overflow-y-auto custom-scrollbar">
                         <div class="w-full space-y-1.5 sm:space-y-3">
                             <div class="flex items-center gap-2">
                                 <div class="p-1 bg-indigo-500/20 rounded-md sm:rounded-lg text-indigo-400 shrink-0">
@@ -318,7 +325,7 @@
 
             </div>
 
-            <!-- FLOATING RESPONSIVE CONTROLS BAR -->
+            <!-- FLOATING RESPONSIVE CONTROLS BAR (Always Fully Visible on Smartphone) -->
             <div class="border-t border-slate-200 bg-white p-2 sm:p-3 px-2.5 sm:px-6 z-20 flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-4 shrink-0 shadow-lg">
                 
                 <!-- Age Control Slider -->
