@@ -728,10 +728,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMobile = window.innerWidth < 640;
 
         if (hudButtonsRow) {
-            if (isMobile && (tabName === 'ln' || tabName === 'grid' || tabName === 'hourglass')) {
-                hudButtonsRow.classList.add('hidden');
-            } else {
+            if (tabName === 'curve') {
                 hudButtonsRow.classList.remove('hidden');
+            } else {
+                hudButtonsRow.classList.add('hidden');
             }
         }
 
